@@ -1,0 +1,10 @@
+{
+	"workspace": {
+	  "library":[
+	     "/home/dario/.config/hypr"
+	  ]
+        },
+	"diagnostics": {
+          "globals":["hl"]
+	}
+}
