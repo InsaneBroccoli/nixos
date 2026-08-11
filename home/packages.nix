@@ -3,7 +3,6 @@
 {
   # List of packages to install for the user
   home.packages = with pkgs; [
-      neovim
       rofi
       thunar
       fastfetch
@@ -16,6 +15,8 @@
       udiskie
       quickshell
       thunderbird
+      unzip
+      zip
   ];
 
   fonts.fontconfig.enable = true;

@@ -5,6 +5,7 @@
     ./gtk.nix
     ./packages.nix
     ./hyprland/default.nix
+    ./nvchad.nix
     ./shell/default.nix
     ./tex.nix
     ./tmux.nix
