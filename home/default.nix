@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }: 
+{ config, pkgs, lib, vars, ... }: 
 {
   imports = [
     ./desktop-entries.nix
@@ -13,8 +13,8 @@
   ];
 
   home = {
-    username = "dario";
-    homeDirectory = "/home/dario";
+    username = vars.username;
+    homeDirectory = "/home/${vars.username}";
     stateVersion = "26.05";
   };
   

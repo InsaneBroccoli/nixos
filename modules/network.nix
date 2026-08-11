@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, pkgs, vars, ... }:
 {
-  networking.hostName = "think-pad";
+  networking.hostName = vars.hostname;
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
