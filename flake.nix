@@ -9,12 +9,15 @@
   };
   outputs = inputs @ {
     self, nixpkgs, ...
-  }: {
-    nixosConfigurations.think-pad = nixpkgs.lib.nixosSystem {
+  }: 
+  let
+    vars = import ./hosts/think-pad/vars.nix;
+  in {
+    nixosConfigurations.${vars.hostname} = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      specialArgs = {inherit inputs;};
+      specialArgs = {inherit inputs vars;};
       modules = [
-        ./configuration.nix
+        ./hosts/think-pad/configuration.nix
       ];
     };
   };
