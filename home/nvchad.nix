@@ -12,6 +12,7 @@
       tree-sitter
       clang-tools
       lua-language-server
+      kdePackages.qtdeclarative
       # your language servers from the last step go here
     ];
   };
