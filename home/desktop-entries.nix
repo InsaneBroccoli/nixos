@@ -18,4 +18,9 @@ in
     name = "Tailscale Admin Console";
     exec = "${browser} --app=https://console.tailscale.com/admin/machines";
   };
+
+  xdg.desktopEntries.youtube = {
+    name = "YouTube";
+    exec = "${browser} --app=https://www.youtube.com/";
+  };
 }
