@@ -14,6 +14,7 @@
       slurp
       udiskie
       quickshell
+      jq
       thunderbird
       unzip
       zip
