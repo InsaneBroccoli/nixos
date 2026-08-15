@@ -23,4 +23,9 @@ in
     name = "YouTube";
     exec = "${browser} --app=https://www.youtube.com/";
   };
+
+  xdg.desktopEntries.digitec = {
+    name = "Digitec";
+    exec = "${browser} --app=https://www.digitec.ch/en";
+  };
 }
