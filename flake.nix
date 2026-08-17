@@ -6,10 +6,17 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    pixie-sddm = {
+      url = "github:xCaptaiN09/pixie-sddm";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
+
   outputs = inputs @ {
-    self, nixpkgs, ...
+    self, nixpkgs, pixie-sddm, ...
   }: 
+
   let
     vars = import ./hosts/think-pad/vars.nix;
   in {

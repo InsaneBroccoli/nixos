@@ -227,7 +227,7 @@ hl.config({
 hl.config({
     input = {
         kb_layout  = "ch",
-        kb_variant = "",
+        kb_variant = "de_nodeadkeys",
         kb_model   = "",
         kb_options = "",
         kb_rules   = "",
