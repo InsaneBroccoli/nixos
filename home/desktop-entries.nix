@@ -28,4 +28,9 @@ in
     name = "Digitec";
     exec = "${browser} --app=https://www.digitec.ch/en";
   };
+
+  xdg.desktopEntries.github = {
+    name = "GitHub";
+    exec = "${browser} --app=https://github.com/";
+  };
 }
