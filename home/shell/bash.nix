@@ -1,12 +1,12 @@
-{ pkgs, config, ... }:
+{ config, pkgs, vars,... }:
 
 {
   programs.bash = {
     enable = true;
     shellAliases = {
       ff = "fastfetch";
-      nrs = "sudo nixos-rebuild switch --flake ~/nixos#think-pad";
-      nrb = "sudo nixos-rebuild dry-build --flake ~/nixos#think-pad";
+      nrs = "sudo nixos-rebuild switch --flake ~/nixos#${vars.hostname}";
+      nrb = "sudo nixos-rebuild dry-build --flake ~/nixos#${vars.hostname}";
       ls = "eza -l";
       void = "systemctl poweroff";
       # tmux
