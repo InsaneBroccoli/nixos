@@ -1,10 +1,11 @@
-{ config, pkgs, inputs, ...}:
+{ config, ... }:
 
 {
   imports = 
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./default.nix
+      ../common.nix
+      ../../modules/tlp.nix
     ];
 
   # This option defines the first version of NixOS you have installed on this particular machine,
