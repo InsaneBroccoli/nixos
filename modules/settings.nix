@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, vars, ... }:
 {
   nix.gc = {
     automatic = true;
@@ -7,7 +7,7 @@
   };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  nix.settings.trusted-users = [ "root" "dario" ];
+  nix.settings.trusted-users = [ "root" vars.username ];
 
   programs.nano.enable = false;
 }
