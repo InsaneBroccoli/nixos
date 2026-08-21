@@ -6,7 +6,7 @@
       rofi
       thunar
       fastfetch
-      brave
+      brave-origin
       teams-for-linux
       nerd-fonts.jetbrains-mono
       noto-fonts
