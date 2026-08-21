@@ -7,6 +7,7 @@
     ../modules/bootloader.nix
     ../modules/editor.nix
     ../modules/encryption.nix
+    ../modules/firewall.nix
     ../modules/home.nix
     ../modules/locale.nix
     ../modules/network.nix
