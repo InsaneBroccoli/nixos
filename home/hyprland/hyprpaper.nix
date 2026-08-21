@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, vars, ... }:
 
 {
   home.packages = [ pkgs.hyprpaper ];
@@ -9,8 +9,8 @@
       preload = "~/Pictures/wallpapers/alena-aenami-lights1k1.jpg";
       splash = false;
       wallpaper = {
-        monitor="eDP-1";
-        path="~/Pictures/wallpapers/alena-aenami-lights1k1.jpg";
+        monitor = vars.monitor;
+        path = "~/Pictures/wallpapers/alena-aenami-lights1k1.jpg";
       };
     };
   };
