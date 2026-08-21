@@ -18,14 +18,18 @@
   }: 
 
   let
-    vars = import ./hosts/think-pad/vars.nix;
+    mkHost = hostDir: let
+      vars = import (hostDir + /vars.nix);
+    in nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = {inherit inputs vars;};
+        modules = [
+          (hostDir + /configuration.nix)
+        ];
+    };
   in {
-    nixosConfigurations.${vars.hostname} = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = {inherit inputs vars;};
-      modules = [
-        ./hosts/think-pad/configuration.nix
-      ];
+    nixosConfigurations = {
+      think-pad = mkHost ./hosts/think-pad;
     };
   };
 }
