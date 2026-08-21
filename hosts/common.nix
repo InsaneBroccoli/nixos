@@ -15,7 +15,7 @@
     ../modules/sddm.nix
     ../modules/settings.nix
     ../modules/smb.nix
-    ../modules/ssh.nix
+    ../modules/sshd.nix
     ../modules/swap.nix
     ../modules/tailscale.nix
     ../modules/user.nix
