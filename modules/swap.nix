@@ -1,9 +1,10 @@
 { ... }:
 
 {
-  # needs further setup resum= and resume_offset=
-  swapDevices = [{
-    device = "/swap/swapfile";
-    size = 32 * 1024;
-  }];
+  zramSwap = {
+    enable = true;
+    priority = 100;
+    algorithm = "lz4";
+    memoryPercent = 50;
+  };
 }
