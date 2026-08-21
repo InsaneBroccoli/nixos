@@ -3,16 +3,17 @@
 {
   programs.ssh = {
     enable = true;
-    matchBlocks = {
+    settings = {
+      "*" = {
+        AddKeysToAgent = true;
+        HashKnownHosts = true;
+      };
+
       "github.com" = {
         identityFile = "~/.ssh/${vars.sshKeyName}";
         identitiesOnly = true;
       };
       # TODO: one block per non-tailnet host
     };
-    extraConfig = ''
-      AddKeysToAgent yes
-      HashKnownHosts yes
-    '';
   };
 }
