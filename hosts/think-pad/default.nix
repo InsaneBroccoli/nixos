@@ -18,7 +18,7 @@
       ../../modules/swap.nix
       ../../modules/ssh.nix
       ../../modules/tailscale.nix
-      ../../modules/tpl.nix
+      ../../modules/tlp.nix
       ../../modules/user.nix
     ];
 }
