@@ -13,7 +13,6 @@
       grim
       slurp
       udiskie
-      quickshell
       jq
       thunderbird
       unzip

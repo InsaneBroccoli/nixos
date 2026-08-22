@@ -2,6 +2,7 @@
 {
   imports = [
     ./hyprland/default.nix
+    ./quickshell/default.nix
     ./shell/default.nix
     ./desktop-entries.nix
     ./git.nix
