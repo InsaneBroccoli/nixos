@@ -1,7 +1,7 @@
 { lib, pkgs, ... }:
 
 let
-  browser = lib.getExe pkgs.brave;
+  browser = lib.getExe pkgs.brave-origin;
 in 
 {
   xdg.desktopEntries.whatsapp = {
