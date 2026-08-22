@@ -13,7 +13,7 @@
       tux = "tmux new-session -A -s tuxedo -c ~/tuxedo/ 'tuxedo'";
       nixos = "tmux new-session -A -s nixos -c ~/nixos/";
       aoc = "tmux new-session -A -s AdventOfCode -c ~/aoc/ 'nix develop'";
-      devqs = "tmux new-session -A -s quickshell -c ~/.config/quickshell/dots/";
+      devqs = "tmux new-session -A -s quickshell -c ~/.config/quickshell/dots-dev/";
     };
   };
 }
