@@ -1,5 +1,5 @@
 # home/quickshell/default.nix — still needs the real values filled in
-{ pkgs, ... }:
+{ pkgs, vars, ... }:
 {
   home.packages = [ pkgs.quickshell ];
 
@@ -23,4 +23,7 @@
       recursive = true;
   };
 
+  xdg.configFile."quickshell/host-facts.json".text = builtins.toJSON {
+    hasBattery = vars.hasBattery or false;
+  };
 }
