@@ -7,5 +7,6 @@
     tree
     wl-clipboard
     eza
+    rsync
   ];
 }
