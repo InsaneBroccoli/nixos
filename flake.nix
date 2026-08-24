@@ -1,5 +1,6 @@
 {
-  description = "Nix Hyprland lua";
+  description = "Dario's NixOS";
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager = {
@@ -21,8 +22,8 @@
     mkHost = hostDir: let
       vars = import (hostDir + /vars.nix);
     in nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = {inherit inputs vars;};
+        system = vars.architecture;
+        specialArgs = { inherit inputs vars hostDir; };
         modules = [
           (hostDir + /configuration.nix)
         ];

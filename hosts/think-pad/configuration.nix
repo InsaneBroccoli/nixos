@@ -4,7 +4,8 @@
   imports = 
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../common.nix
+      ../../modules/common.nix
+      ../../modules/encryption.nix
       ../../modules/tlp.nix
     ];
 

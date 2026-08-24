@@ -1,4 +1,4 @@
-{ config, pkgs, lib, vars, ... }: 
+{ config, pkgs, vars, ... }: 
 {
   imports = [
     ./hyprland/default.nix
@@ -19,7 +19,7 @@
   home = {
     username = vars.username;
     homeDirectory = "/home/${vars.username}";
-    stateVersion = "26.05";
+    stateVersion = vars.homeStateVersion;
   };
   
   # Enable Home Manager
