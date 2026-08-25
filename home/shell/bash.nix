@@ -7,6 +7,7 @@
       ff = "fastfetch";
       nrs = "sudo nixos-rebuild switch --flake ~/nixos#${vars.hostname}";
       nrb = "sudo nixos-rebuild dry-build --flake ~/nixos#${vars.hostname}";
+      ns = "nix-search-tv print | fzf --preview 'nix-search-tv preview {}' --scheme history";
       ls = "eza -l";
       void = "systemctl poweroff";
       # tmux
