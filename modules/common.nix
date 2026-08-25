@@ -14,7 +14,6 @@
     ./printing.nix
     ./sddm.nix
     ./settings.nix
-    ./smb.nix
     ./sshd.nix
     ./swap.nix
     ./tailscale.nix
