@@ -3,21 +3,22 @@
 {
   imports = 
   [
-    ../modules/audio.nix  
-    ../modules/bootloader.nix
-    ../modules/editor.nix
-    ../modules/firewall.nix
-    ../modules/home.nix
-    ../modules/locale.nix
-    ../modules/network.nix
-    ../modules/packages.nix
-    ../modules/printing.nix
-    ../modules/sddm.nix
-    ../modules/settings.nix
-    ../modules/smb.nix
-    ../modules/sshd.nix
-    ../modules/swap.nix
-    ../modules/tailscale.nix
-    ../modules/user.nix
+    ./audio.nix  
+    ./bootloader.nix
+    ./editor.nix
+    ./firewall.nix
+    ./home.nix
+    ./locale.nix
+    ./network.nix
+    ./packages.nix
+    ./printing.nix
+    ./sddm.nix
+    ./settings.nix
+    ./smb.nix
+    ./sshd.nix
+    ./swap.nix
+    ./tailscale.nix
+    ./unfree.nix
+    ./user.nix
   ];
 }
