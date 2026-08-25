@@ -2,8 +2,8 @@
   username = "dario";
   hostname = "game-box";
   architecture = "x86_64-linux";
-  homeStateVersion = "";
+  homeStateVersion = "26.05";
   sshKeyName = "";
-  monitor = "";
+  monitor = "eDP-1";
   hasBattery = false;
 }

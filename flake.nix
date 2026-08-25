@@ -31,6 +31,7 @@
   in {
     nixosConfigurations = {
       think-pad = mkHost ./hosts/think-pad;
+      game-box = mkHost ./hosts/game-box;
     };
   };
 }

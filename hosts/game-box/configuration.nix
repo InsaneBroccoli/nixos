@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 
 {
   imports = 
@@ -9,6 +9,7 @@
       ../../modules/steam.nix
     ];
 
-  boot.kernelPackage = pkgs.linuxPackages_lts;
+  boot.kernelPackages = pkgs.linuxPackages;
+  system.stateVersion = "26.05";
 }
 

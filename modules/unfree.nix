@@ -10,5 +10,6 @@
       "nvidia-persistenced"
       "steam"
       "steam-unwrapped"
+      "nvidia-kernel-modules"
     ];
 }
