@@ -43,4 +43,9 @@ in
     name = "Discord";
     exec = "${browser} --app=https://discord.com/channels/@me";
   };
+
+  xdg.desktopEntries.protondb = {
+    name = "ProtonDB";
+    exec = "${browser} --app=https://www.protondb.com/";
+  };
 }
