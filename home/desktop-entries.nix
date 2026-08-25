@@ -33,4 +33,14 @@ in
     name = "GitHub";
     exec = "${browser} --app=https://github.com/";
   };
+
+  xdg.desktopEntries.spotify = {
+    name = "Spotify";
+    exec = "${browser} --app=https://open.spotify.com/";
+  };
+
+  xdg.desktopEntries.discord = {
+    name = "Discord";
+    exec = "${browser} --app=https://discord.com/channels/@me";
+  };
 }
