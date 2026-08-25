@@ -8,6 +8,7 @@
       ../../modules/smb.nix
       ../../modules/nvidia.nix
       ../../modules/steam.nix
+      ../../modules/wootility.nix
     ];
 
   boot.kernelPackages = pkgs.linuxPackages;

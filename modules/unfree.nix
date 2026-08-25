@@ -11,5 +11,6 @@
       "steam"
       "steam-unwrapped"
       "nvidia-kernel-modules"
+      "wootility"
     ];
 }
