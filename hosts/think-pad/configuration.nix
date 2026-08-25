@@ -6,6 +6,7 @@
       ./hardware-configuration.nix
       ../../modules/common.nix
       ../../modules/wifi.nix
+      ../../modules/smb.nix
       ../../modules/encryption.nix
       ../../modules/tlp.nix
     ];
