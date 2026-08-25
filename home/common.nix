@@ -12,7 +12,6 @@
     ./nvim.nix
     ./tex.nix
     ./tmux.nix
-    ./tui.nix
     ./yazi.nix
   ];
 
