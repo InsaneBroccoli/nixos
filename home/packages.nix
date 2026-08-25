@@ -5,7 +5,6 @@
   home.packages = with pkgs; [
       rofi
       thunar
-      fastfetch
       brave-origin
       teams-for-linux
       nerd-fonts.jetbrains-mono
