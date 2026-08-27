@@ -48,4 +48,9 @@ in
     name = "ProtonDB";
     exec = "${browser} --app=https://www.protondb.com/";
   };
+
+  xdg.desktopEntries.home-assistant = {
+    name = "Home Assistant";
+    exec = "${browser} --app=http://home-assistant.tail56a79d.ts.net:8123/home/overview";
+  };
 }
