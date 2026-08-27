@@ -15,6 +15,7 @@
       nixos = "tmux new-session -A -s nixos -c ~/nixos/";
       aoc = "tmux new-session -A -s AdventOfCode -c ~/aoc/ 'nix develop'";
       devqs = "tmux new-session -A -s quickshell -c ~/.config/quickshell/dots-dev/";
+      devhypr = "tmux new-session -A -s hyprland -c ~/nixos/home/hyprland/";
       rpi = "tmux new-session -A -s rpi 'tailscale ssh void@blackhole'";
     };
   };
