@@ -1,17 +1,16 @@
 { config, pkgs, vars, ... }: 
 {
   imports = [
-    ./hyprland/default.nix
-    ./quickshell/default.nix
-    ./shell/default.nix
+    ./basic
+    ./hyprland
+    ./quickshell
     ./desktop-entries.nix
-    ./git.nix
+    ./ghostty.nix
     ./gtk.nix
     ./packages.nix
-    ./ssh.nix
     ./nvim.nix
     ./tex.nix
-    ./tmux.nix
+    ./tui.nix
     ./yazi.nix
   ];
 

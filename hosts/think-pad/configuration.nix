@@ -4,7 +4,8 @@
   imports = 
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../../modules/common.nix
+      ../../modules
+      ../../modules/desktop
       ../../modules/wifi.nix
       ../../modules/smb.nix
       ../../modules/encryption.nix

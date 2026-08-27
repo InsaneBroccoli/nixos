@@ -1,9 +1,7 @@
 { ... }:
 
 {
-  imports = 
-  [
-    ./audio.nix  
+  imports = [
     ./bootloader.nix
     ./editor.nix
     ./firewall.nix
@@ -11,8 +9,6 @@
     ./locale.nix
     ./network.nix
     ./packages.nix
-    ./printing.nix
-    ./sddm.nix
     ./settings.nix
     ./sshd.nix
     ./swap.nix

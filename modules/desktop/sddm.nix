@@ -28,7 +28,7 @@
     # fall back to theme defaults if not set.
     (inputs.pixie-sddm.packages.${pkgs.stdenv.hostPlatform.system}.pixie-sddm.override {
       # background = ./my-background.jpg; # Nix path or absolute path
-      avatar = ../pictures/profile/cosmic-blackhole.jpg;
+      avatar = ../../pictures/profile/cosmic-blackhole.jpg;
       accentColor = "#3F5F91";          # Hex color code
       autoColor = true;                 # true/false
       backgroundColor = "#1A1C1E";      # Hex color code
