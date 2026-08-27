@@ -19,15 +19,7 @@
 ------------------
 ---- MONITORS ----
 ------------------
-
--- See https://wiki.hypr.land/Configuring/Basics/Monitors/
-hl.monitor({
-    output   = "eDP-1",
-    mode     = "preferred",
-    position = "auto",
-    scale    = "auto",
-})
-
+require("monitors")
 
 ---------------------
 ---- MY PROGRAMS ----
@@ -57,11 +49,7 @@ end)
 -------------------------------
 ---- ENVIRONMENT VARIABLES ----
 -------------------------------
-
 -- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Environment-variables/
-
-hl.env("XCURSOR_SIZE", "24")
-hl.env("HYPRCURSOR_SIZE", "24")
 
 
 -----------------------
