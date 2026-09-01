@@ -53,4 +53,9 @@ in
     name = "Home Assistant";
     exec = "${browser} --app=http://home-assistant.tail56a79d.ts.net:8123/home/overview";
   };
+
+  xdg.desktopEntries.adguardHome = {
+    name = "AdGuard Home";
+    exec = "${browser} --app=http://100.86.204.126/";
+  };
 }
