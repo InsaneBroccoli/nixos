@@ -12,5 +12,6 @@
       "steam-unwrapped"
       "nvidia-kernel-modules"
       "wootility"
+      "claude-code"
     ];
 }
