@@ -11,8 +11,8 @@
 
   options.myConfig.desktop.compositor = lib.mkOption {
     type = lib.types.enum [ "hyprland" "niri" ];
-    default = "hyprland";
-    example = "niri";
+    default = "niri";
+    example = "hyprland";
     description = ''
       Which Wayland compositor this host boots into.
     '';
