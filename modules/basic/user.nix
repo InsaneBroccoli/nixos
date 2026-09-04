@@ -6,6 +6,6 @@
     isNormalUser = true;
     uid = 1000;
     description = vars.username;
-    extraGroups = ["networkmanager" "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
   };
 }

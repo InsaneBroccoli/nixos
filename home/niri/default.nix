@@ -10,8 +10,8 @@
     services.wpaperd = {
       enable = true;
       settings = {
-        eDP-1 = {
-          path = "/home/${vars.username}/nixos/pictures/wallpapers/alena-aenami-lights1k1.jpg";
+        ${vars.monitor} = {
+          path = ../../pictures/wallpapers/alena-aenami-lights1k1.jpg;
         };
       };
     };
