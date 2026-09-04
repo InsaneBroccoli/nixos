@@ -3,6 +3,7 @@
   imports = [
     ./basic
     ./hyprland
+    ./niri
     ./quickshell
     ./desktop-entries.nix
     ./ghostty.nix
