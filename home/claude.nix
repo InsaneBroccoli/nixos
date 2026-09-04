@@ -1,11 +1,17 @@
 { ... }:
 
 {
+  programs.bash.shellAliases = {
+    cns = "tmux new-session -A -s claude-nixos -c ~/nixos/tools 'claude'";
+  };
+
   programs.claude-code = {
     enable = true;
+
     settings = {
       theme = "dark";
     };
+
     agents = {
       code-advisor = ''
         ---
