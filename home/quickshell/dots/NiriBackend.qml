@@ -33,9 +33,9 @@ QtObject {
                         ? a.idx - b.idx
                         : String(a.output).localeCompare(String(b.output)))
         .map(ws => ({
-            // `key` is opaque to the bar, so we store what niri's
-            // CLI actually accepts as a workspace reference.
-            key:      ws.name ? ws.name : ws.idx,
+            // niri's socket resolves {"reference":{"Id":…}} against
+            // the global workspace id, not the per-output idx.
+            key:      ws.id,
             label:    ws.name ? ws.name : String(ws.idx),
             focused:  ws.is_focused === true,
             // TODO(you): active_window_id is null for an empty
@@ -48,18 +48,41 @@ QtObject {
             output:   ws.output ?? ""
         }))
 
+    // ── sending actions ───────────────────────────────────────
+    // Won't redial if the connection dies — restart quickshell if
+    // that ever happens. Not worth building reconnect logic for.
+    // `connected` tracks desired state, not an established link, so
+    // a click fired in the first moments after `active` flips true
+    // (before the async connect lands) is dropped with a warning.
+    // Not worth a pending-write queue — nobody clicks that fast.
+    property Socket actionSocket: Socket {
+        path: Quickshell.env("NIRI_SOCKET")
+        connected: root.active
+        onError: err => console.warn("niri: action socket error:", err)
+        parser: SplitParser {
+            onRead: line => {
+                let reply;
+                try {
+                    reply = JSON.parse(line);
+                } catch (e) {
+                    console.warn("niri: unparseable action reply:", line);
+                    return;
+                }
+                if (reply.Err)
+                    console.warn("niri: action failed:", reply.Err);
+            }
+        }
+    }
+
     function focusWorkspace(key) {
-        // TODO(you): this goes through the CLI, which resolves a
-        // bare number as a *per-output* index — ambiguous once you
-        // have two monitors. The correct fix is to write straight
-        // to $NIRI_SOCKET, which takes a workspace id:
-        //
-        //   {"Action":{"FocusWorkspace":{"reference":{"Id":<ws.id>}}}}\n
-        //
-        // Quickshell.Io.Socket can do that. Try it once the rest
-        // works; then `key` becomes ws.id and the mapping above
-        // gets simpler, not harder.
-        Quickshell.execDetached(["niri", "msg", "action", "focus-workspace", String(key)]);
+        if (!actionSocket.connected) {
+            console.warn("niri: action socket not connected, dropping focus request");
+            return;
+        }
+        actionSocket.write(JSON.stringify({
+            Action: { FocusWorkspace: { reference: { Id: key } } }
+        }) + "\n");
+        actionSocket.flush();
     }
 
     // ── the event stream ──────────────────────────────────────
