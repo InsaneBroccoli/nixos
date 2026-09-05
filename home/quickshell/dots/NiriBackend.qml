@@ -26,6 +26,18 @@ QtObject {
     // day niri adds a field you only touch the mapping.
     property var rawWorkspaces: []
 
+    // Raw niri Window objects, same treatment. Only `workspace_id`
+    // is load-bearing here — it drives `occupied` — but the rest
+    // rides along for whatever the bar wants next (urgency, counts).
+    property var rawWindows: []
+
+    // niri sends WindowsChanged one callback *after* the first
+    // WorkspacesChanged, so for a frame `rawWindows` is empty while
+    // `rawWorkspaces` is not. Until it lands, fall back to the
+    // snapshot's own `active_window_id` (fresh at that instant) so
+    // occupied workspaces don't flash the "empty" colour on startup.
+    property bool windowsReady: false
+
     // ── the contract ──────────────────────────────────────────
     readonly property var workspaces: rawWorkspaces
         .slice()                          // never sort in place
@@ -38,13 +50,17 @@ QtObject {
             key:      ws.id,
             label:    ws.name ? ws.name : String(ws.idx),
             focused:  ws.is_focused === true,
-            // TODO(you): active_window_id is null for an empty
-            // workspace, which is *almost* "occupied". It is wrong
-            // for a workspace whose only window is on another
-            // monitor's column. Track WindowsChanged /
-            // WindowOpenedOrChanged / WindowClosed and count
-            // windows per workspace_id if you want this exact.
-            occupied: ws.active_window_id !== null && ws.active_window_id !== undefined,
+            // "occupied" = at least one window lives here. Derived
+            // from the window list, not ws.active_window_id: that
+            // field only refreshes on a WorkspacesChanged snapshot,
+            // which barely fires once the workspace set is fixed
+            // (persistent workspaces in workspaces.kdl), so it rots
+            // to its startup value and empty/occupied stops tracking.
+            // The active_window_id branch is the startup-only bridge
+            // described at `windowsReady`.
+            occupied: root.windowsReady
+                ? root.rawWindows.some(w => w.workspace_id === ws.id)
+                : (ws.active_window_id !== null && ws.active_window_id !== undefined),
             output:   ws.output ?? ""
         }))
 
@@ -133,13 +149,31 @@ QtObject {
                 is_focused: focused ? (w.id === id) : w.is_focused
             }));
 
+        } else if (ev.WindowsChanged) {
+            // Full window snapshot, sent once just after the first
+            // WorkspacesChanged.
+            root.rawWindows = ev.WindowsChanged.windows;
+            root.windowsReady = true;
+
+        } else if (ev.WindowOpenedOrChanged) {
+            // Upsert by id. Also fires on title/focus/layout changes,
+            // not just workspace moves — each is a harmless rebuild
+            // of a short list. filter-then-concat, never push, or the
+            // `workspaces` binding won't see it (array identity).
+            const win = ev.WindowOpenedOrChanged.window;
+            root.rawWindows = root.rawWindows
+                .filter(w => w.id !== win.id)
+                .concat([win]);
+
+        } else if (ev.WindowClosed) {
+            const id = ev.WindowClosed.id;
+            root.rawWindows = root.rawWindows.filter(w => w.id !== id);
+
         }
-        // TODO(you): three more events are worth handling, in this
+        // TODO(you): two more events are worth handling, in this
         // order of usefulness. Each is a few lines and follows the
         // rebuild-the-array pattern above:
         //
-        //   WorkspaceActiveWindowChanged {workspace_id, active_window_id}
-        //       -> keeps `occupied` honest as you open/close windows
         //   WorkspaceUrgencyChanged      {id, urgent}
         //       -> add `urgent` to the contract in Wm.qml and a
         //          Theme.bar.wsUrgent colour, then use it in
