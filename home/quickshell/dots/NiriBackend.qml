@@ -38,29 +38,40 @@ QtObject {
     // occupied workspaces don't flash the "empty" colour on startup.
     property bool windowsReady: false
 
+    // "does a raw workspace hold a window?" — the single source of
+    // truth for both the visibility filter and the `occupied` field.
+    // Window-list derived, NOT ws.active_window_id: that field only
+    // refreshes on a WorkspacesChanged snapshot, which barely fires
+    // once the workspace set is fixed (persistent workspaces in
+    // workspaces.kdl), so it rots to its startup value. The
+    // active_window_id branch is the startup-only bridge described
+    // at `windowsReady`. Called inside the `workspaces` binding, so
+    // its property reads register as dependencies — safe.
+    function occupied(ws) {
+        return root.windowsReady
+            ? root.rawWindows.some(w => w.workspace_id === ws.id)
+            : (ws.active_window_id !== null && ws.active_window_id !== undefined);
+    }
+
     // ── the contract ──────────────────────────────────────────
     readonly property var workspaces: rawWorkspaces
         .slice()                          // never sort in place
         .sort((a, b) => a.output === b.output
                         ? a.idx - b.idx
                         : String(a.output).localeCompare(String(b.output)))
+        // niri keeps one trailing *unnamed* empty workspace per
+        // output as scratch space. A persistent workspace always has
+        // a name (workspaces.kdl); an unnamed one only earns a chip
+        // while it is focused or holds a window. Without this the bar
+        // shows a stray "10" (or "11", once "0" is added) chip.
+        .filter(ws => !!ws.name || ws.is_focused === true || root.occupied(ws))
         .map(ws => ({
             // niri's socket resolves {"reference":{"Id":…}} against
             // the global workspace id, not the per-output idx.
             key:      ws.id,
             label:    ws.name ? ws.name : String(ws.idx),
             focused:  ws.is_focused === true,
-            // "occupied" = at least one window lives here. Derived
-            // from the window list, not ws.active_window_id: that
-            // field only refreshes on a WorkspacesChanged snapshot,
-            // which barely fires once the workspace set is fixed
-            // (persistent workspaces in workspaces.kdl), so it rots
-            // to its startup value and empty/occupied stops tracking.
-            // The active_window_id branch is the startup-only bridge
-            // described at `windowsReady`.
-            occupied: root.windowsReady
-                ? root.rawWindows.some(w => w.workspace_id === ws.id)
-                : (ws.active_window_id !== null && ws.active_window_id !== undefined),
+            occupied: root.occupied(ws),
             output:   ws.output ?? ""
         }))
 
@@ -156,11 +167,23 @@ QtObject {
             root.windowsReady = true;
 
         } else if (ev.WindowOpenedOrChanged) {
-            // Upsert by id. Also fires on title/focus/layout changes,
-            // not just workspace moves — each is a harmless rebuild
-            // of a short list. filter-then-concat, never push, or the
-            // `workspaces` binding won't see it (array identity).
+            // Upsert by id. This fires on every title/focus/layout
+            // change too, not just workspace moves. `occupied` (the
+            // only consumer today) keys off workspace_id, so when
+            // that is unchanged, refresh the stored object in place
+            // and stop: mutating an element keeps the array identity,
+            // so the `workspaces` binding does not re-run and the
+            // bar's chip delegates are not rebuilt — but a later
+            // consumer of e.g. is_urgent still sees current data.
             const win = ev.WindowOpenedOrChanged.window;
+            const prev = root.rawWindows.find(w => w.id === win.id);
+            if (prev && prev.workspace_id === win.workspace_id) {
+                Object.assign(prev, win);
+                return;
+            }
+            // workspace_id changed (or new window): rebuild so the
+            // binding sees it. filter-then-concat, never push —
+            // array identity must change.
             root.rawWindows = root.rawWindows
                 .filter(w => w.id !== win.id)
                 .concat([win]);
