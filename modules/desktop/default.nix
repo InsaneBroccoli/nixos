@@ -3,6 +3,7 @@
 {
   imports = [
     ./audio.nix
+    ./bluetooth.nix
     ./hypr.nix
     ./niri.nix
     ./printing.nix
