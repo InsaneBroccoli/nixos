@@ -3,6 +3,7 @@
 {
   programs.bash.shellAliases = {
     cns = "tmux new-session -A -s claude-nixos -c ~/nixos/tools 'claude'";
+    cqs = "tmux new-session -A -s claude-qs -c ~/.config/quickshell/dots-dev/tools/ 'claude'";
   };
 
   programs.claude-code = {
