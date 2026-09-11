@@ -8,3 +8,9 @@ workspace "7"
 workspace "8"
 workspace "9"
 workspace "0"
+
+// external
+// workspace "o" {
+//   // open-on-output "HDMI-A-1"
+// }
+
