@@ -13,6 +13,8 @@
       clang-tools
       lua-language-server
       kdePackages.qtdeclarative
+      nixd
+      nixfmt
       # your language servers from the last step go here
     ];
   };
