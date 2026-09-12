@@ -20,6 +20,19 @@ in
 
     settings = {
       theme = "dark";
+
+      env = {
+        CLAUDE_CODE_SUBAGENT_MODEL = "opus";
+      };
+
+      modelSettings = {
+        "claude-fable-5" = {
+          effortLevel = "medium";
+        };
+        "claude-opus-5" = {
+          effortLevel = "high";
+        };
+      };
     };
 
     agents = {
