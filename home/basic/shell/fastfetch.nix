@@ -5,9 +5,15 @@ let
   esc = builtins.fromJSON ''"\u001b"'';
   grey = "${esc}[90m";
 
-  rule = s: { type = "custom"; format = "${grey}${s}"; };
+  rule = s: {
+    type = "custom";
+    format = "${grey}${s}";
+  };
 
-  item = color: key: type: { inherit type key; keyColor = color; };
+  item = color: key: type: {
+    inherit type key;
+    keyColor = color;
+  };
   hw = item "green";
   sw = item "yellow";
   de = item "blue";
@@ -29,14 +35,17 @@ in
         type = "builtin";
         height = 15;
         width = 30;
-        padding = { top = 5; left = 3; };
+        padding = {
+          top = 5;
+          left = 3;
+        };
       };
 
       modules = [
         "break"
 
         (rule "┌──────────────────────Hardware───────────────────────────┐")
-        (hw "󰌢  PC"   "host")
+        (hw "󰌢  PC" "host")
         (hw "│ ├󰻠 " "cpu")
         (hw "│ ├󰍹 " "gpu")
         (hw "│ ├󰑭 " "memory")
@@ -46,7 +55,7 @@ in
         "break"
 
         (rule "┌──────────────────────Software───────────────────────────┐")
-        (sw "  OS"    "os")
+        (sw "  OS" "os")
         (sw "│ ├󰌽 " "kernel")
         (sw "│ ├󰖡 " "bios")
         (sw "│ ├󰏗 " "packages")
@@ -54,7 +63,7 @@ in
 
         "break"
 
-        (de "󰧨  DE"   "de")
+        (de "󰧨  DE" "de")
         (de "│ ├󰍁 " "lm")
         (de "│ ├󱂬 " "wm")
         (de "│ ├󰉦 " "wmtheme")
@@ -69,7 +78,11 @@ in
         (up "  ›  DateTime  " "datetime")
         (rule "└─────────────────────────────────────────────────────────┘")
 
-        { type = "colors"; paddingLeft = 2; symbol = "circle"; }
+        {
+          type = "colors";
+          paddingLeft = 2;
+          symbol = "circle";
+        }
       ];
     };
   };

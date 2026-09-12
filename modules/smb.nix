@@ -1,8 +1,9 @@
 { config, vars, ... }:
-let 
+let
   user = config.users.users.${vars.username};
   group = config.users.groups.${user.group};
-in {
+in
+{
   boot.supportedFilesystems.cifs = true;
 
   fileSystems."/mnt/nas" = {

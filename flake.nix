@@ -14,24 +14,34 @@
     };
   };
 
-  outputs = inputs @ {
-    self, nixpkgs, pixie-sddm, ...
-  }: 
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      pixie-sddm,
+      ...
+    }:
 
-  let
-    mkHost = hostDir: let
-      vars = import (hostDir + /vars.nix);
-    in nixpkgs.lib.nixosSystem {
-        system = vars.architecture;
-        specialArgs = { inherit inputs vars hostDir; };
-        modules = [
-          (hostDir + /configuration.nix)
-        ];
+    let
+      mkHost =
+        hostDir:
+        let
+          vars = import (hostDir + /vars.nix);
+        in
+        nixpkgs.lib.nixosSystem {
+          system = vars.architecture;
+          specialArgs = { inherit inputs vars hostDir; };
+          modules = [
+            (hostDir + /configuration.nix)
+          ];
+        };
+    in
+    {
+      nixosConfigurations = {
+        think-pad = mkHost ./hosts/think-pad;
+        game-box = mkHost ./hosts/game-box;
+      };
+
+      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-tree;
     };
-  in {
-    nixosConfigurations = {
-      think-pad = mkHost ./hosts/think-pad;
-      game-box = mkHost ./hosts/game-box;
-    };
-  };
 }

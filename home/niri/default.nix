@@ -1,4 +1,9 @@
-{ lib, osConfig, vars, ... }:
+{
+  lib,
+  osConfig,
+  vars,
+  ...
+}:
 
 {
   config = lib.mkIf (osConfig.myConfig.desktop.compositor == "niri") {

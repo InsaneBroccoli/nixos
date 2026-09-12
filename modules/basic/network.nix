@@ -1,4 +1,9 @@
-{ config, pkgs, vars, ... }:
+{
+  config,
+  pkgs,
+  vars,
+  ...
+}:
 {
   networking.hostName = vars.hostname;
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.

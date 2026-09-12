@@ -1,4 +1,4 @@
-{lib, ... }:
+{ lib, ... }:
 
 {
   imports = [
@@ -11,7 +11,10 @@
   ];
 
   options.myConfig.desktop.compositor = lib.mkOption {
-    type = lib.types.enum [ "hyprland" "niri" ];
+    type = lib.types.enum [
+      "hyprland"
+      "niri"
+    ];
     default = "niri";
     example = "hyprland";
     description = ''

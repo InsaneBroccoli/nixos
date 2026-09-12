@@ -1,7 +1,12 @@
 { pkgs, ... }:
 {
   home.packages = [
-    (pkgs.texlive.withPackages (ps: with ps; [ scheme-medium moderncv ]))
+    (pkgs.texlive.withPackages (
+      ps: with ps; [
+        scheme-medium
+        moderncv
+      ]
+    ))
   ];
 
   programs.zathura.enable = true;

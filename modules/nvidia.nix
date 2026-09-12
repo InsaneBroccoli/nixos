@@ -1,9 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
-    modesetting.enable = true;   # mandatory for Wayland. not optional.
+    modesetting.enable = true; # mandatory for Wayland. not optional.
 
     # DECIDE: your 2080 Ti is Turing — the *oldest* generation the open
     # modules support, and the least exercised there.

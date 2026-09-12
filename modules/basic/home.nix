@@ -1,7 +1,14 @@
-{ config, inputs, pkgs, vars, hostDir, ... }:
+{
+  config,
+  inputs,
+  pkgs,
+  vars,
+  hostDir,
+  ...
+}:
 
 {
-  imports = [ 
+  imports = [
     inputs.home-manager.nixosModules.home-manager
   ];
 
@@ -12,5 +19,5 @@
     users = {
       ${vars.username} = hostDir + /home-configuration.nix;
     };
-  };  
+  };
 }

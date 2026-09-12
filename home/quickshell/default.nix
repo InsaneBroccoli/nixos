@@ -11,7 +11,7 @@
       ConditionEnvironment = "WAYLAND_DISPLAY";
     };
     Service = {
-      ExecStart = "${pkgs.quickshell}/bin/qs -c dots";  # TODO: verify binary name
+      ExecStart = "${pkgs.quickshell}/bin/qs -c dots"; # TODO: verify binary name
       Restart = "always";
       RestartSec = "10";
     };
@@ -19,8 +19,8 @@
   };
 
   xdg.configFile."quickshell/dots" = {
-      source = ./dots;
-      recursive = true;
+    source = ./dots;
+    recursive = true;
   };
 
   xdg.configFile."quickshell/host-facts.json".text = builtins.toJSON {

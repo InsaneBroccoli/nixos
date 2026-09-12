@@ -2,7 +2,7 @@
 
 let
   browser = lib.getExe pkgs.brave-origin;
-in 
+in
 {
   xdg.desktopEntries.whatsapp = {
     name = "Whatsapp";

@@ -1,4 +1,11 @@
-{ lib, osConfig, config, pkgs, vars, ... }:
+{
+  lib,
+  osConfig,
+  config,
+  pkgs,
+  vars,
+  ...
+}:
 
 let
   wallpaper = ../../pictures/wallpapers/alena-aenami-lights1k1.jpg;
@@ -6,7 +13,7 @@ in
 {
   config = lib.mkIf (osConfig.myConfig.desktop.compositor == "hyprland") {
 
-  home.packages = [pkgs.hyprpaper];
+    home.packages = [ pkgs.hyprpaper ];
 
     services.hyprpaper = {
       enable = true;

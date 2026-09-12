@@ -18,9 +18,9 @@
   };
 
   services.xserver.xkb = {
-      layout = "ch";
-      variant = "de_nodeadkeys";
+    layout = "ch";
+    variant = "de_nodeadkeys";
   };
 
   console.useXkbConfig = true;
-  }
+}

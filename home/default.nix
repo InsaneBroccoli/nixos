@@ -1,4 +1,9 @@
-{ config, pkgs, vars, ... }: 
+{
+  config,
+  pkgs,
+  vars,
+  ...
+}:
 {
   imports = [
     ./basic
@@ -20,7 +25,7 @@
     homeDirectory = "/home/${vars.username}";
     stateVersion = vars.homeStateVersion;
   };
-  
+
   # Enable Home Manager
   programs.home-manager.enable = true;
 }

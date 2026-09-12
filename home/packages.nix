@@ -1,22 +1,27 @@
-{ config, pkgs, lib, ...  }: 
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   # List of packages to install for the user
   home.packages = with pkgs; [
-      bluetui
-      rofi
-      thunar
-      brave-origin
-      teams-for-linux
-      nerd-fonts.jetbrains-mono
-      noto-fonts
-      grim
-      slurp
-      udiskie
-      jq
-      thunderbird
-      unzip
-      zip
+    bluetui
+    rofi
+    thunar
+    brave-origin
+    teams-for-linux
+    nerd-fonts.jetbrains-mono
+    noto-fonts
+    grim
+    slurp
+    udiskie
+    jq
+    thunderbird
+    unzip
+    zip
   ];
 
   fonts.fontconfig.enable = true;
