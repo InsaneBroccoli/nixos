@@ -1,4 +1,9 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  config,
+  vars,
+  ...
+}:
 
 {
   imports = [
@@ -12,28 +17,21 @@
     ../../modules/tlp.nix
   ];
 
-  # Raptor Lake iGPU: Mesa alone gives OpenGL/Vulkan, VA-API decode needs the
-  # iHD driver (free). libva picks iHD first for i915, no LIBVA_DRIVER_NAME
-  # needed. `enable` is set explicitly: it is otherwise only true through the
-  # graphical-desktop module, and extraPackages is ignored when it is false.
+  services.displayManager.autoLogin = {
+    enable = true;
+    user = vars.username;
+  };
+
   hardware.graphics = {
     enable = true;
     extraPackages = [ pkgs.intel-media-driver ];
   };
   environment.systemPackages = [ pkgs.libva-utils ]; # `vainfo` to verify
 
-  # Consumes the firmware DPTF tables (INT3400) for managed thermal ramping
-  # instead of the EC's blunt trip points. Complementary to TLP.
   services.thermald.enable = true;
 
-  # hardware-configuration.nix sets no options for /, and nixpkgs appends
-  # x-initrd.mount itself. Takes effect on switch via remount, no reboot.
-  # Weekly fstrim is on, so no `discard` here.
   fileSystems."/".options = [ "noatime" ];
 
-  # 14C/20T in a 28 W chassis: unbounded parallel builds saturate the power
-  # limit and starve the desktop. 2x4 = 8 of 20 threads, and the daemon
-  # yields CPU and I/O to interactive work.
   nix.settings = {
     max-jobs = 2;
     cores = 4;
