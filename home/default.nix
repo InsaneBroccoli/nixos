@@ -1,6 +1,4 @@
 {
-  config,
-  pkgs,
   vars,
   ...
 }:
@@ -9,12 +7,8 @@
     ./basic
     ./niri
     ./quickshell
-    ./desktop-entries.nix
-    ./ghostty.nix
-    ./gtk.nix
     ./packages.nix
     ./nvim.nix
-    ./tex.nix
     ./tui.nix
     ./yazi.nix
   ];

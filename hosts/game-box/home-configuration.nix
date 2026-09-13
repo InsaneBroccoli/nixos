@@ -3,5 +3,6 @@
 {
   imports = [
     ../../home
+    ../../home/desktop
   ];
 }
