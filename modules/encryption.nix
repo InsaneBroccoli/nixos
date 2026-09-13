@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ ... }:
 
 {
   # enroll tpm2: sudo systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=7 /dev/<luks-partition>
