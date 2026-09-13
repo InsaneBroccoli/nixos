@@ -6,6 +6,7 @@
     ./editor.nix
     ./firewall.nix
     ./fwupd.nix
+    ./desktop-option.nix
     ./home.nix
     ./locale.nix
     ./network.nix

@@ -4,21 +4,13 @@
   imports = [
     ./audio.nix
     ./bluetooth.nix
-    ./hypr.nix
     ./niri.nix
     ./printing.nix
     ./sddm.nix
   ];
 
-  options.myConfig.desktop.compositor = lib.mkOption {
-    type = lib.types.enum [
-      "hyprland"
-      "niri"
-    ];
-    default = "niri";
-    example = "hyprland";
-    description = ''
-      Which Wayland compositor this host boots into.
-    '';
-  };
+  # Importing this directory is what makes a host a desktop. The option
+  # itself is declared in modules/basic/desktop-option.nix so the home
+  # layer can read it on every host.
+  myConfig.desktop.enable = lib.mkDefault true;
 }

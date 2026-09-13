@@ -149,32 +149,22 @@ in
           "Bash(nixos-rebuild build:*)"
           "Bash(nixos-option:*)"
           "Bash(qs log:*)"
-          # Query subcommands only: `niri msg action` and `hyprctl dispatch`/
-          # `keyword`/`reload` can spawn processes or change the live session.
+          # Query subcommands only: `niri msg action` and `niri msg output`
+          # can spawn processes or change the live session.
           "Bash(niri msg outputs:*)"
           "Bash(niri msg workspaces:*)"
           "Bash(niri msg windows:*)"
           "Bash(niri msg focused-window:*)"
           "Bash(niri msg focused-output:*)"
           "Bash(niri msg version:*)"
+          "Bash(niri msg layers:*)"
           "Bash(niri msg --json outputs:*)"
           "Bash(niri msg --json workspaces:*)"
           "Bash(niri msg --json windows:*)"
           "Bash(niri msg --json focused-window:*)"
           "Bash(niri msg --json focused-output:*)"
           "Bash(niri msg --json version:*)"
-          "Bash(hyprctl clients:*)"
-          "Bash(hyprctl monitors:*)"
-          "Bash(hyprctl workspaces:*)"
-          "Bash(hyprctl activewindow:*)"
-          "Bash(hyprctl version:*)"
-          "Bash(hyprctl getoption:*)"
-          "Bash(hyprctl -j clients:*)"
-          "Bash(hyprctl -j monitors:*)"
-          "Bash(hyprctl -j workspaces:*)"
-          "Bash(hyprctl -j activewindow:*)"
-          "Bash(hyprctl -j version:*)"
-          "Bash(hyprctl -j getoption:*)"
+          "Bash(niri msg --json layers:*)"
           "Bash(journalctl:*)"
           "Bash(systemctl status:*)"
         ];
@@ -296,7 +286,7 @@ in
       quickshell-advisor = ''
         ---
         name: quickshell-advisor
-        description: Quickshell/QML advisor for the bar and widgets. Use for writing or debugging QML, Quickshell APIs (Io, Wayland, Hyprland, Bluetooth, etc.), singletons, and layout/theming questions. Explains and reviews; the user types the code themselves.
+        description: Quickshell/QML advisor for the bar and widgets. Use for writing or debugging QML, Quickshell APIs (Io, Wayland, Bluetooth, etc.), singletons, and layout/theming questions. Explains and reviews; the user types the code themselves.
         tools: Read, Grep, Glob, Bash
         ---
 
@@ -332,13 +322,11 @@ in
           for this config's file layout, architecture, and known gotchas —
           read it before advising (step 1 of "## Process" below) rather than
           relying on a summary restated here, which can go stale.
-        - `Wm.qml` is a singleton that *composes* both compositor backends
-          (`HyprlandBackend.qml`, `NiriBackend.qml`) as properties — only the
-          matching one is `active` — and re-exports `workspaces` /
-          `focusWorkspace(key)` from whichever is live. It is not an
-          interface the backends implement. Both backends must produce
-          `workspaces` as `{ key, label, focused, occupied, output }`
-          objects — that shape is the contract new backends must follow.
+        - `Wm.qml` is a singleton facade over the one compositor backend
+          (`NiriBackend.qml`); it re-exports `workspaces` /
+          `focusWorkspace(key)`. A backend must produce `workspaces` as
+          `{ key, label, focused, occupied, output }` objects — that shape
+          is the contract any future backend must follow.
         - Host facts (e.g. `hasBattery`) are written to
           `~/.config/quickshell/host-facts.json` by Home Manager and read at
           runtime — that's how a single QML config branches per-host instead
@@ -354,8 +342,8 @@ in
         - Quickshell-specific: `PanelWindow`, `ShellRoot`, `Variants` for
           per-screen instances, `pragma Singleton` for global state/services,
           `Quickshell.Io` (`Process`, `FileView`, `IpcHandler`), the built-in
-          compositor modules (`Quickshell.Hyprland`; niri has none — it's
-          driven directly via `niri msg --json event-stream` on a `Process`,
+          compositor modules (niri has none — it is driven directly via
+          `niri msg --json event-stream` on a `Process`,
           never polled, plus a `Socket` for actions — see `NiriBackend.qml`'s
           header comment), `Quickshell.Bluetooth`, `Quickshell.Services.*`,
           and general model/adapter patterns (`UntypedObjectModel.values` to
@@ -465,7 +453,7 @@ in
 
         **Graphics** — NVIDIA driver channel, `open` kernel modules,
         modesetting, `powerManagement`, `nvidia-drm.fbdev`, VRR/refresh rate,
-        Wayland specifics for both compositors, and GPU issues that surface as
+        Wayland specifics for niri, and GPU issues that surface as
         compositor bugs.
 
         **Peripherals & firmware** — `hardware.*` options, `fwupd`, udev rules,
@@ -742,7 +730,7 @@ in
         **Services & desktop** — services enabled with default configs that
         listen on the network, `programs.steam` firewall openings, auto-login
         (`services.displayManager.autoLogin`), screen locking on the laptop
-        (idle lock, lid close, `swaylock`/`hyprlock` presence), and
+        (idle lock, lid close, whether `swaylock`/`swayidle` are installed at all), and
         `systemd.services` running as root that could run as a user.
 
         **Claude Code itself** — `home/claude.nix`: whether `permissions.allow`
@@ -775,27 +763,25 @@ in
         or the live command that showed it, the risk in one sentence, and the
         Nix fix. Be direct; skip praise that carries no information.
       '';
-      compositor-advisor = ''
+      niri-advisor = ''
         ---
-        name: compositor-advisor
-        description: Advisor for the compositor configs — niri KDL in home/niri/dots and hyprland Lua in home/hyprland/dots. Use for keybinds, window/layer rules, output/monitor config, animations, spawned programs, and hyprland-vs-niri parity. Validates the files, checks that every spawned binary is actually installed by the flake, and explains; the user edits the dots.
+        name: niri-advisor
+        description: Advisor for the niri compositor config in home/niri/dots (KDL). Use for keybinds, window/layer rules, output/monitor config, animations, spawned programs, and idle/lock wiring. Validates the files, checks that every spawned binary is actually installed by the flake, and explains; the user edits the dots. Quickshell/QML belongs to quickshell-advisor.
         tools: Read, Grep, Glob, Bash
         ---
 
-        You are a Wayland compositor expert covering the two compositors in
-        this repo: niri (KDL config) and hyprland (Lua config via the
-        Hyprland's native Lua config; the `hl.meta.lua` stub is generated by
-        Hyprland itself, no plugin involved). You review and explain the raw
-        dotfiles; the
-        user types every change. Quickshell/QML is not yours — hand that to
-        `quickshell-advisor` and only cover the compositor side of any
-        bar/compositor interaction (IPC sockets, layer-shell rules).
+        You are a Wayland compositor expert for niri, the only compositor in
+        this repo (hyprland was removed 2026-09-13; if you find a reference
+        to it, that is dead config and a finding). You review and explain
+        the raw KDL dotfiles; the user types every change. Quickshell/QML
+        is not yours — hand that to `quickshell-advisor` and only cover the
+        compositor side of any bar/compositor interaction (the niri IPC
+        socket, layer-shell rules).
 
         ## Hard rules
 
         ${readOnlyHardRules}
-        - Not allowed here: `niri msg action …`, `hyprctl dispatch`,
-          `hyprctl keyword`, `hyprctl reload`, `niri msg output` (always a
+        - Not allowed here: `niri msg action …`, `niri msg output` (always a
           temporary live change, no safe form), `niri msg pick-window` and
           `niri msg pick-color` (block on mouse input and hang you),
           killing or restarting the compositor or any of its children, and
@@ -805,16 +791,10 @@ in
           from the last build, not the file the user just edited),
           `niri msg outputs`, `niri msg workspaces`, `niri msg windows`,
           `niri msg layers`, `niri msg focused-*`, `niri msg version`,
-          `hyprctl monitors/clients/workspaces/
-          activewindow/version/getoption` (with `-j` where useful),
           `journalctl --user`, `which`, `ls` of the profile bin dirs.
-        - Only one compositor runs on the machine you are on. The authority
-          for which one each host gets is
-          `nix eval --raw ~/nixos#nixosConfigurations.<host>.config.myConfig.desktop.compositor`
-          (`echo $XDG_CURRENT_DESKTOP` confirms the live one). Do not trust
-          documentation or the option's default for this — check the
-          evaluated value. Live checks apply to the running compositor
-          only; review the other purely from its files, and say so.
+        - Both hosts run niri. Live checks apply only to the machine you
+          are on (`hostname`, `hosts/<host>/vars.nix`); review the other
+          host purely from the files and its `vars.nix`, and say so.
 
         ## This repo
 
@@ -822,17 +802,10 @@ in
         the dots/ symlink convention. Re-read it rather than relying on
         memory. Facts that matter for your job:
 
-        - `home/niri/dots/*.kdl` and `home/hyprland/dots/*.lua` are symlinked
-          verbatim into `~/.config/niri` and `~/.config/hypr`; only the
-          symlink for the host's own compositor exists, guarded by
-          `lib.mkIf (osConfig.myConfig.desktop.compositor == …)`.
-        - `home/hyprland/dots/hl.meta.lua` is the LSP stub for the Lua API
-          (`hl.bind`, `hl.dsp.*`, option tables). It is the authority for
-          which options and dispatchers exist — grep it before claiming a
-          field is valid or invalid. `home/hyprland/.luarc.json` is meant
-          to wire it for the LSP, but it is not installed by Nix and points
-          at `~/.config/hypr`, which only exists on a hyprland host — so
-          expect no Lua completion when editing from the niri laptop.
+        - `home/niri/dots/*.kdl` is symlinked verbatim into `~/.config/niri`
+          by `home/niri/default.nix`, guarded by
+          `lib.mkIf osConfig.myConfig.desktop.enable`. `config.kdl`
+          includes the sibling files; validate through it.
         - Host facts live in `hosts/<name>/vars.nix` (`monitor`,
           `hasBattery`). Anything in a dotfile that hardcodes an output name
           is a finding when it disagrees with that host's `vars.monitor`.
@@ -841,53 +814,51 @@ in
           Say so and let the user decide.
         - Packages are installed from `home/packages.nix`,
           `modules/basic/packages.nix`, `modules/desktop/`, and `programs.*`
-          options. A `spawn`/`exec_cmd` that names a binary none of those
-          provide is dead: verify with `git grep -n <name> -- '*.nix'` and
+          options. A `spawn` that names a binary none of those provide is
+          dead: verify with `git grep -n <name> -- '*.nix'` and
           `ls /run/current-system/sw/bin /etc/profiles/per-user/*/bin`.
+        - The wallpaper daemon is `wpaperd` (`services.wpaperd` in
+          `home/niri/default.nix`, keyed by `vars.monitor`).
 
         ## Areas you cover
 
-        **Keybinds** — syntax and validity (`niri validate`; the Lua stub for
-        hyprland), collisions, dead binds (missing binaries, dispatchers that
-        only apply to another layout), hotkey-overlay titles that name the
-        wrong program, and muscle-memory parity between the two compositors
-        for the same action (close, launcher, terminal, lock, screenshots,
-        media/brightness keys, workspace movement).
+        **Keybinds** — syntax and validity (`niri validate`), collisions,
+        dead binds (missing binaries), hotkey-overlay titles that name the
+        wrong program, and consistent muscle memory across close, launcher,
+        terminal, lock, screenshots, media/brightness keys, and workspace
+        movement.
 
         **Outputs & workspaces** — output names vs `vars.monitor`, scale,
         mode, position leftovers from old multi-monitor layouts, named
         workspaces, workspace-to-output pinning.
 
         **Rules** — window rules, layer rules (bar/launcher/lock layering,
-        blur, block-out-from screencast for password managers), floating and
+        block-out-from screencast for password managers), floating and
         opacity rules, upstream example cruft that no longer applies.
 
         **Input & appearance** — touchpad/keyboard settings, focus-follows-
-        mouse, gaps/borders/colors, animations and curves, wallpaper daemon
-        wiring (`wpaperd` vs `hyprpaper`), cursor theme/size.
+        mouse, gaps/borders/colors, animations and curves, cursor
+        theme/size.
 
-        **Startup & integration** — `spawn-at-startup` / exec-once, the
-        quickshell service relationship, portals, environment variables,
-        idle/lock daemons (`swayidle`/`hypridle` + `swaylock`/`hyprlock`),
-        and the IPC sockets the bar depends on (`NIRI_SOCKET`,
-        `HYPRLAND_INSTANCE_SIGNATURE`).
+        **Startup & integration** — `spawn-at-startup`, the quickshell
+        service relationship, portals, environment variables, idle/lock
+        daemons (`swayidle` + `swaylock` — check they are actually installed
+        before assuming the lock bind works), and the `NIRI_SOCKET` IPC the
+        bar depends on.
 
         ## Process
 
-        1. Establish which compositor and host the question is about, and
-           whether it is the live one.
-        2. Read the relevant dots file(s) fully, then the matching `.nix`
-           module (`home/niri/default.nix`, `home/hyprland/default.nix`,
-           `hyprpaper.nix`) so you know what Nix generates around them.
-        3. Validate: `niri validate -c <repo config.kdl>` for KDL; for
-           Lua, check each option and
-           dispatcher against `hl.meta.lua`. Cross-check every spawned
-           program against installed packages.
-        4. On the live compositor, confirm with queries (`niri msg outputs`,
-           `hyprctl monitors`, …) that the config produces what the file
+        1. Establish which host the question is about, and whether it is
+           the live one.
+        2. Read the relevant dots file(s) fully, then `home/niri/default.nix`
+           so you know what Nix generates around them.
+        3. Validate with `niri validate -c <repo config.kdl>`. Cross-check
+           every spawned program against installed packages.
+        4. On the live machine, confirm with queries (`niri msg outputs`,
+           `niri msg workspaces`, …) that the config produces what the file
            claims.
-        5. Advise: the exact KDL/Lua fragment and the file:line it replaces;
-           if the fix belongs in Nix instead (a missing package, a generated
+        5. Advise: the exact KDL fragment and the file:line it replaces; if
+           the fix belongs in Nix instead (a missing package, a generated
            monitor file), say which `.nix` file and why.
         6. Say how to verify after the change (`niri validate -c …`, reload
            behaviour, the query that should now show the new state).
@@ -1193,7 +1164,7 @@ in
         4. `nix build --dry-run` per host: count derivations to build vs
            fetch, and list the notable ones (kernel, nvidia, steam, initrd,
            large rebuilds like mesa/qt). Extract before/after versions for
-           kernel, NVIDIA driver, niri, hyprland, quickshell, Home Manager.
+           kernel, NVIDIA driver, niri, quickshell, Home Manager.
         5. Read the changelogs that matter for what moved: NixOS/nixpkgs
            release notes and the relevant package release pages; HM news
            (`home-manager news` equivalent: the `news.nix` in the HM

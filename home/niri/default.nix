@@ -6,7 +6,7 @@
 }:
 
 {
-  config = lib.mkIf (osConfig.myConfig.desktop.compositor == "niri") {
+  config = lib.mkIf osConfig.myConfig.desktop.enable {
     xdg.configFile."niri/" = {
       source = ./dots;
       recursive = true;
