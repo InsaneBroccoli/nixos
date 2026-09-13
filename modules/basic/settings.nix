@@ -1,9 +1,5 @@
-{
-  config,
-  pkgs,
-  vars,
-  ...
-}:
+{ ... }:
+
 {
   nix.gc = {
     automatic = true;
@@ -15,8 +11,10 @@
     "nix-command"
     "flakes"
   ];
-  nix.settings.trusted-users = [
-    "root"
-    vars.username
-  ];
+  # trusted-users is deliberately left at the NixOS default (root only). A
+  # trusted user can push unsigned store paths and add substituters, which is
+  # root-equivalent. Rebuilds run as root via sudo, so nothing needs it.
+  # Consequences: CLI `--option substituters/max-jobs/...` from the user are
+  # silently ignored (tune via nix.settings instead), and a future
+  # `nixos-rebuild --build-host` from another machine would need trust again.
 }

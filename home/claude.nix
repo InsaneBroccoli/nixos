@@ -143,10 +143,17 @@ in
           "WebFetch(domain:nixos.org)"
           "WebFetch(domain:discourse.nixos.org)"
           "Bash(nix flake metadata:*)"
+          # Prefix rules match on a token boundary (`prefix` + space), so a
+          # rule ending in `.#` can never match `.#attr`. Allow eval broadly
+          # and deny the file-reading forms (--expr/-f) below instead.
           "Bash(nix eval:*)"
           "Bash(nix search:*)"
-          "Bash(nix build:*)"
-          "Bash(nixos-rebuild build:*)"
+          # Only the forms that leave no ./result symlink in the repo. The
+          # flag must come first: prefix matching is positional.
+          "Bash(nix build --no-link:*)"
+          "Bash(nix build --dry-run:*)"
+          "Bash(nixos-rebuild build --no-link:*)"
+          "Bash(nixos-rebuild list-generations:*)"
           "Bash(nixos-option:*)"
           "Bash(qs log:*)"
           # Query subcommands only: `niri msg action` and `niri msg output`
@@ -177,6 +184,31 @@ in
           "Bash(nix flake update:*)"
           "Bash(git push:*)"
           "Bash(git reset:*)"
+          "Bash(git checkout:*)"
+          "Bash(git switch:*)"
+          "Bash(git restore:*)"
+          "Bash(git stash:*)"
+          "Bash(git clean:*)"
+        ];
+        # Never, in any session. Deny beats allow and ask, and wrappers such
+        # as `sudo`/`env` are stripped before matching. Store garbage
+        # collection and imperative profile changes have no place in a
+        # declarative repo (the weekly `nix.gc` timer runs as root outside
+        # this tool and is unaffected). `nix eval --expr`/`-f` can read any
+        # file into the transcript; a flag placed after the installable
+        # escapes this, which is accepted.
+        deny = [
+          "Bash(nix-collect-garbage:*)"
+          "Bash(nix store gc:*)"
+          "Bash(nix store delete:*)"
+          "Bash(nix-store --gc:*)"
+          "Bash(nix-store --delete:*)"
+          "Bash(nix profile:*)"
+          "Bash(nix-env:*)"
+          "Bash(nix eval --expr:*)"
+          "Bash(nix eval --impure:*)"
+          "Bash(nix eval -f:*)"
+          "Bash(nix eval --file:*)"
         ];
       };
     };
@@ -479,7 +511,7 @@ in
            style. If it is host-conditional, show the `myConfig.*` option and the
            `lib.mkIf` guard, not a hostname check.
         6. Say how to verify: the build command
-           (`nixos-rebuild build --flake .#<host>`), and the runtime check that
+           (`nixos-rebuild build --no-link --flake .#<host>`), and the runtime check that
            proves the change took effect after a switch.
 
         ## Output format
