@@ -9,11 +9,8 @@
   # List of packages to install for the user
   home.packages = with pkgs; [
     bluetui
-    thunar
     brave-origin
     teams-for-linux
-    nerd-fonts.jetbrains-mono
-    noto-fonts
     grim
     slurp
     udiskie
@@ -23,5 +20,6 @@
     zip
   ];
 
+  # Still needed: gtk.nix installs a font (Inter) into the user profile.
   fonts.fontconfig.enable = true;
 }

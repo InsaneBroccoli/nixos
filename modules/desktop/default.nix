@@ -4,6 +4,8 @@
   imports = [
     ./audio.nix
     ./bluetooth.nix
+    ./files.nix
+    ./fonts.nix
     ./niri.nix
     ./printing.nix
     ./sddm.nix
