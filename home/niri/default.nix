@@ -43,8 +43,23 @@ in
     # wayland-session.nix, which declares security.pam.services.swaylock.
     programs.swaylock = {
       enable = true;
+      # Colours follow Theme.qml (Monokai Pro): base, surface, green, blue,
+      # red, foreground. Line and separator are transparent so only the ring
+      # and its fill show.
       settings = {
-        color = "2D2A2E"; # Theme.qml base
+        color = "2D2A2E";
+        font = "JetBrainsMono Nerd Font";
+        font-size = 24;
+        indicator-radius = 100;
+        indicator-thickness = 8;
+        ring-color = "403E41";
+        inside-color = "2D2A2E";
+        key-hl-color = "A9DC76";
+        ring-ver-color = "78DCE8";
+        ring-wrong-color = "FF6188";
+        text-color = "FCFCFA";
+        line-color = "00000000";
+        separator-color = "00000000";
         ignore-empty-password = true;
         show-failed-attempts = true;
       };
