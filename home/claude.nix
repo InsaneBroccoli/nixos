@@ -1,6 +1,66 @@
-{ ... }:
+{ pkgs, lib, ... }:
 
 let
+  # Claude Code pipes session JSON to stdin on every refresh and shows the
+  # first line of stdout. Renders: model effort │ dir  branch │ ctx % │ 5h %
+  statusLine = pkgs.writeShellApplication {
+    name = "claude-statusline";
+    runtimeInputs = [
+      pkgs.jq
+      pkgs.git
+    ];
+    text = ''
+      # Unit separator, not tab: tab is IFS whitespace, so empty fields
+      # (e.g. no effort level) would collapse and shift the rest. Control
+      # characters are replaced so a newline, separator or escape sequence in
+      # a path can't break the line. Percentages pass only as integers 0-100,
+      # because pct evaluates them as bash arithmetic. On malformed JSON jq
+      # prints nothing, read fails, and the status line is left blank.
+      IFS=$'\x1f' read -r model effort dir ctx five_hour < <(
+        jq -r '
+          def text: . // "" | tostring | gsub("[[:cntrl:]]"; "?");
+          def pct: (numbers | select(0 <= . and . <= 100) | floor | tostring) // "";
+          [
+            (.model.display_name | text),
+            (.effort.level | text),
+            (.workspace.current_dir | text),
+            (.context_window.used_percentage | pct),
+            (.rate_limits.five_hour.used_percentage | pct)
+          ] | join("\u001f")'
+      ) || exit 0
+
+      dim=$'\e[2m' cyan=$'\e[36m' magenta=$'\e[35m' yellow=$'\e[33m' red=$'\e[31m' reset=$'\e[0m'
+      sep=" ''${dim}│''${reset} "
+
+      # Green below 50 %, yellow below 80 %, red from 80 %.
+      pct() {
+        local color=$'\e[32m'
+        (($1 >= 50)) && color=$yellow
+        (($1 >= 80)) && color=$red
+        printf '%s%s%%%s' "$color" "$1" "$reset"
+      }
+
+      shown_dir=$dir
+      if [[ $dir == "$HOME" || $dir == "$HOME"/* ]]; then
+        shown_dir=\~''${dir#"$HOME"}
+      fi
+
+      out="''${cyan}''${model}''${reset}"
+      [[ -n $effort ]] && out+=" ''${dim}''${effort}''${reset}"
+      out+="''${sep}''${shown_dir}"
+
+      # git -C "" would fall back to Claude's own cwd and show the wrong branch.
+      if [[ -n $dir ]] && branch=$(git -C "$dir" --no-optional-locks branch --show-current 2>/dev/null) && [[ -n $branch ]]; then
+        out+=" ''${magenta} ''${branch}''${reset}"
+      fi
+
+      [[ -n $ctx ]] && out+="''${sep}ctx $(pct "$ctx")"
+      [[ -n $five_hour ]] && out+="''${sep}5h $(pct "$five_hour")"
+
+      printf '%s\n' "$out"
+    '';
+  };
+
   # Shared verbatim between code-advisor, quickshell-advisor and
   # toolchain-advisor — all "explain, review, don't implement" agents with
   # identical closing guidance.
@@ -42,6 +102,11 @@ in
     settings = {
       model = "opus";
       theme = "dark";
+
+      statusLine = {
+        type = "command";
+        command = lib.getExe statusLine;
+      };
 
       env = {
         CLAUDE_CODE_SUBAGENT_MODEL = "opus";
