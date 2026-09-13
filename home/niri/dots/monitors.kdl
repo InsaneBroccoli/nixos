@@ -1,14 +1,16 @@
-// You can configure outputs by their name, which you can find
-// by running `niri msg outputs` while inside a niri instance.
-// The built-in laptop monitor is usually called "eDP-1".
-// Find more information on the wiki:
-// https://niri-wm.github.io/niri/Configuration:-Outputs
-// Remember to uncomment the node by removing "/-"!
-output "eDP-1" {
-    // off
-    mode "1920x1200@60.026"
-    scale 1.25
+// One block per host. niri ignores blocks whose output is not connected,
+// so this file is shared verbatim by both machines. Names must match
+// `monitor` in hosts/<name>/vars.nix; confirm with `niri msg outputs`.
+// Caveat: "DP-1" is a connector name, so a DisplayPort screen docked to
+// think-pad would pick up the game-box block. Switch that block to the
+// "Make Model Serial" form if that ever happens.
 
-    transform "normal"
-    position x=1280 y=0
+// think-pad — built-in panel. Preferred mode (1920x1200@60.026) is the default.
+output "eDP-1" {
+    scale 1.25
+}
+
+// game-box — desktop monitor. Preferred mode until a specific mode or VRR is wanted.
+output "DP-1" {
+    scale 1
 }

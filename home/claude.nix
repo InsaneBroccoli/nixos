@@ -807,11 +807,11 @@ in
           `lib.mkIf osConfig.myConfig.desktop.enable`. `config.kdl`
           includes the sibling files; validate through it.
         - Host facts live in `hosts/<name>/vars.nix` (`monitor`,
-          `hasBattery`). Anything in a dotfile that hardcodes an output name
-          is a finding when it disagrees with that host's `vars.monitor`.
-          Dotfiles cannot read `vars`, so the fix is to generate that one
-          file from Nix — an exception to the verbatim-`dots/` convention.
-          Say so and let the user decide.
+          `hasBattery`). `dots/monitors.kdl` deliberately carries one
+          `output` block per host — niri ignores blocks for outputs that
+          are not connected — so the file stays verbatim. A finding is an
+          output name there that matches no host's `vars.monitor`, or a
+          host whose `vars.monitor` has no block.
         - Packages are installed from `home/packages.nix`,
           `modules/basic/packages.nix`, `modules/desktop/`, and `programs.*`
           options. A `spawn` that names a binary none of those provide is

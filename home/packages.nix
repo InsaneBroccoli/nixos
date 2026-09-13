@@ -9,7 +9,6 @@
   # List of packages to install for the user
   home.packages = with pkgs; [
     bluetui
-    rofi
     thunar
     brave-origin
     teams-for-linux
