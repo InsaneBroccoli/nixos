@@ -15,7 +15,7 @@
 
       alias = {
         st = "status -sb";
-        lg = "log --oneline --graph --decorate";
+        lg = "log --oneline --graph --decorate -n 20";
       };
     };
   };
