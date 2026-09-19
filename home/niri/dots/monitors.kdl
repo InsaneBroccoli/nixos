@@ -10,7 +10,9 @@ output "eDP-1" {
     scale 1.25
 }
 
-// game-box — desktop monitor. Preferred mode until a specific mode or VRR is wanted.
+// game-box — Dell AW2518H. EDID prefers 60 Hz, so the mode must be explicit.
 output "DP-1" {
     scale 1
+    mode "1920x1080@240.000"
+    variable-refresh-rate on-demand=true
 }

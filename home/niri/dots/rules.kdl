@@ -39,3 +39,9 @@ window-rule {
     geometry-corner-radius 12
     clip-to-geometry true
 }
+
+// VRR opt-in for every window; monitors.kdl's on-demand setting is what
+// limits it to fullscreen.
+window-rule {
+    variable-refresh-rate true
+}
