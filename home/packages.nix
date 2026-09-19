@@ -6,7 +6,6 @@
 }:
 
 {
-  # List of packages to install for the user
   home.packages = with pkgs; [
     bluetui
     brave-origin

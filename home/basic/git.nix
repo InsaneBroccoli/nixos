@@ -1,4 +1,3 @@
-# home/git.nix
 { config, pkgs, ... }:
 {
   programs.git = {

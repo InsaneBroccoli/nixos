@@ -1,8 +1,8 @@
 { pkgs, lib, ... }:
 
 let
-  # Claude Code pipes session JSON to stdin on every refresh and shows the
-  # first line of stdout. Renders: model effort │ dir  branch │ ctx % │ 5h %
+  # Reads session JSON on stdin, prints one line:
+  # model effort │ dir  branch │ ctx % │ 5h %
   statusLine = pkgs.writeShellApplication {
     name = "claude-statusline";
     runtimeInputs = [
@@ -10,12 +10,11 @@ let
       pkgs.git
     ];
     text = ''
-      # Unit separator, not tab: tab is IFS whitespace, so empty fields
-      # (e.g. no effort level) would collapse and shift the rest. Control
-      # characters are replaced so a newline, separator or escape sequence in
-      # a path can't break the line. Percentages pass only as integers 0-100,
-      # because pct evaluates them as bash arithmetic. On malformed JSON jq
-      # prints nothing, read fails, and the status line is left blank.
+      # Unit separator, not tab: tab is IFS whitespace, so empty fields would
+      # collapse and shift the rest. Control characters are replaced (not
+      # dropped) so the field count survives; percentages pass only as integers
+      # 0-100, because pct evaluates them as bash arithmetic. On malformed JSON
+      # jq prints nothing and read fails, so `|| exit 0` leaves the line blank.
       IFS=$'\x1f' read -r model effort dir ctx five_hour < <(
         jq -r '
           def text: . // "" | tostring | gsub("[[:cntrl:]]"; "?");
@@ -61,20 +60,16 @@ let
     '';
   };
 
-  # Shared verbatim between code-advisor, quickshell-advisor and
-  # toolchain-advisor — all "explain, review, don't implement" agents with
-  # identical closing guidance.
+  # Shared between code-advisor, quickshell-advisor and toolchain-advisor.
   advisorOutputFormat = ''
     Be concise and direct. Lead with the recommendation, then the reasoning.
     Use `file:line` references liberally. Skip praise that carries no
     information. End with concrete next steps the user can take themselves.
   '';
 
-  # Shared verbatim between hardware-tuner and toolchain-advisor — both are
-  # read-only advisors that have full Bash and must police themselves. Each
-  # agent follows this with its own bullet naming the commands that are and
-  # aren't allowed in its domain. No trailing newline on purpose, so the
-  # agent's next bullet lands directly under the last shared one.
+  # Shared between hardware-tuner and toolchain-advisor: read-only advisors
+  # with full Bash that must police themselves. Each agent follows this with
+  # its own allowed/not-allowed bullet. No trailing newline, on purpose.
   readOnlyHardRules = ''
     - You are read-only. Never modify files; you have no editing tools and
       should not ask for them. Hand the user the exact snippet and the file
@@ -225,6 +220,11 @@ in
       read-only and return advice, not edits — implement the result yourself
       in the main thread. Run `code-reviewer` after a non-trivial change or
       when the user asks for a review, not after every small edit.
+
+      **Keep comments lean.** A comment earns its place by explaining why a
+      non-obvious choice was made — not by restating the code or padding with
+      background the reader can look up. One or two lines is usually enough;
+      never let a comment outgrow the thing it describes.
     '';
 
     agents = {

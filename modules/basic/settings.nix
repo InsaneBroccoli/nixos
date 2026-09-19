@@ -11,10 +11,10 @@
     "nix-command"
     "flakes"
   ];
-  # trusted-users is deliberately left at the NixOS default (root only). A
-  # trusted user can push unsigned store paths and add substituters, which is
-  # root-equivalent. Rebuilds run as root via sudo, so nothing needs it.
-  # Consequences: CLI `--option substituters/max-jobs/...` from the user are
-  # silently ignored (tune via nix.settings instead), and a future
-  # `nixos-rebuild --build-host` from another machine would need trust again.
+  # trusted-users is deliberately left at the default (root only): a trusted
+  # user can push unsigned paths and add substituters, which is root-
+  # equivalent. Rebuilds run as root via sudo, so nothing needs it. Side
+  # effect: CLI `--option substituters/max-jobs/...` are ignored, so tune via
+  # nix.settings instead. Revisit if a remote `nixos-rebuild --build-host`
+  # ever needs to push to this machine — that would need trust again.
 }

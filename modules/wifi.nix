@@ -1,9 +1,6 @@
 { ... }:
 
 {
-  # Enable networking
-  # networking.networkmanager.enable = true;
-  # networking.networkmanager.wifi.backend = "iwd";
   networking.dhcpcd.wait = "background";
   networking.wireless.iwd.enable = true;
   networking.wireless.iwd.settings = {
@@ -14,5 +11,4 @@
       AutoConnect = true;
     };
   };
-
 }

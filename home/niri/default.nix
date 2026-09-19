@@ -26,26 +26,23 @@ in
       };
     };
 
-    # Spawned from dots/binds.kdl; keep this list in sync with the binds.
+    # Spawned from dots/binds.kdl; keep in sync with the binds.
     home.packages = [ pkgs.playerctl ];
 
     programs.fuzzel = {
       enable = true;
       settings.main = {
-        # fuzzel appends the command, so the -e is required for ghostty.
-        terminal = "ghostty -e";
+        terminal = "ghostty -e"; # fuzzel appends the command, so -e is required
         font = "JetBrainsMono Nerd Font:size=11";
       };
     };
 
-    # Bound to Super+Alt+L in dots/binds.kdl and used by swayidle below.
-    # The PAM service comes from NixOS: programs.niri pulls in
-    # wayland-session.nix, which declares security.pam.services.swaylock.
+    # Bound to Super+Alt+L in dots/binds.kdl and used by swayidle below. The
+    # PAM service comes from NixOS via programs.niri.
     programs.swaylock = {
       enable = true;
-      # Colours follow Theme.qml (Monokai Pro): base, surface, green, blue,
-      # red, foreground. Line and separator are transparent so only the ring
-      # and its fill show.
+      # Colours follow Theme.qml (Monokai Pro). Line and separator are
+      # transparent so only the ring and its fill show.
       settings = {
         color = "2D2A2E";
         font = "JetBrainsMono Nerd Font";
@@ -65,8 +62,8 @@ in
       };
     };
 
-    # Lock before sleep and on `loginctl lock-session`; lock after 5 min
-    # idle and blank the panel a minute later.
+    # Lock before sleep and on `loginctl lock-session`; lock at 5 min idle,
+    # blank the panel a minute later.
     services.swayidle = {
       enable = true;
       events = {

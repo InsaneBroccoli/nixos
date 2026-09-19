@@ -7,9 +7,9 @@
     brightnessctl
   ];
 
-  # brightnessctl ships udev rules that let the `video` group write to
+  # brightnessctl's udev rules let the `video` group write to
   # /sys/class/backlight; the brightness keys in home/niri/dots/binds.kdl
-  # depend on this.
+  # depend on it.
   services.udev.packages = [ pkgs.brightnessctl ];
   users.users.${vars.username}.extraGroups = [ "video" ];
 }

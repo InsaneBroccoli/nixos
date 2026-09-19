@@ -8,12 +8,10 @@
   services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
-    modesetting.enable = true; # mandatory for Wayland. not optional.
+    modesetting.enable = true; # mandatory for Wayland
 
-    # DECIDE: your 2080 Ti is Turing — the *oldest* generation the open
-    # modules support, and the least exercised there.
-    # Start false (proprietary, best-tested for this card).
-    # Flipping to true later is a one-line experiment.
+    # DECIDE: Turing is the oldest generation the open modules support and the
+    # least exercised there; proprietary is better tested for this card.
     open = false;
 
     # DECIDE: stable / production / beta.
@@ -21,9 +19,7 @@
 
     nvidiaSettings = true;
 
-    # LEAVE OFF for now. Known flaky, and you'd never know whether a
-    # suspend bug was this or something else. Add it when you have a
-    # suspend problem to solve.
+    # Known flaky; add only when there is a suspend problem to solve.
     # powerManagement.enable = false;
   };
 }

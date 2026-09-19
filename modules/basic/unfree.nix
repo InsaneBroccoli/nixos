@@ -1,5 +1,3 @@
-# modules/basic/unfree.nix
-
 { lib, ... }:
 
 {
@@ -9,11 +7,11 @@
     pkg:
     builtins.elem (lib.getName pkg) [
       "nvidia-x11" # game-box: modules/nvidia.nix
-      "nvidia-kernel-modules" # game-box: closed kernel modules (hardware.nvidia.open = false)
+      "nvidia-kernel-modules" # game-box: hardware.nvidia.open = false
       "nvidia-settings" # game-box: modules/nvidia.nix
       "steam" # game-box: modules/steam.nix
       "steam-unwrapped" # game-box: modules/steam.nix
-      "wootility" # game-box: hardware.wooting installs the Wootility app
-      "claude-code" # think-pad: home/claude.nix
+      "wootility" # game-box: hardware.wooting
+      "claude-code" # both hosts: home/claude.nix
     ];
 }

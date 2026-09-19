@@ -10,7 +10,7 @@ in
     device = "//100.123.7.79/Synology";
     fsType = "cifs";
     options = [
-      # --- automount behaviour ---
+      # automount
       "noauto"
       "x-systemd.automount"
       "x-systemd.requires=tailscaled.service"
@@ -19,21 +19,19 @@ in
       "x-systemd.device-timeout=30s"
       "x-systemd.mount-timeout=30s"
 
-      # --- credentials ---
       "credentials=/etc/nixos-smb/synologyPlay14"
 
-      # --- hardening ---
-      # Defense in depth: the share is nounix with forced modes anyway.
-      # vers=3.1.1 is a deliberate hard floor (pre-auth integrity, no silent
-      # downgrade); it does not encrypt, and `seal` is unnecessary because the
-      # transport is Tailscale. Applies to the next mount, so after a switch
-      # `sudo umount /mnt/nas` (or wait for the idle timeout) and re-check
-      # with `findmnt /mnt/nas`.
+      # nosuid/nodev are defense in depth — the share is nounix with forced
+      # modes anyway. vers=3.1.1 is a deliberate floor: pre-auth integrity, no
+      # silent downgrade. It does not encrypt; `seal` is unnecessary because
+      # the transport is Tailscale. Applies to the next mount, so
+      # `sudo umount /mnt/nas` (or wait for the idle timeout), then check
+      # `findmnt /mnt/nas`.
       "nosuid"
       "nodev"
       "vers=3.1.1"
 
-      # --- ownership mapping ---
+      # ownership mapping
       "uid=${toString user.uid}"
       "gid=${toString group.gid}"
       "file_mode=0644"
