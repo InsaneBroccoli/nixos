@@ -2,7 +2,6 @@
 
 {
   imports = [
-    # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ../../modules
     ../../modules/desktop
@@ -13,5 +12,13 @@
   ];
 
   boot.kernelPackages = pkgs.linuxPackages;
+
+  # Always on AC and no TLP here, so nothing else manages the governor.
+  powerManagement.cpuFreqGovernor = "performance";
+
+  # NT sync primitives for Proton. Ships with 6.18 but nothing autoloads it;
+  # games also need PROTON_USE_NTSYNC=1 in their launch options.
+  boot.kernelModules = [ "ntsync" ];
+
   system.stateVersion = "26.05";
 }
