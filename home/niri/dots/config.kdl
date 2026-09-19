@@ -6,6 +6,9 @@
 include "inputs.kdl"
 include "monitors.kdl"
 
+// think-pad has no steam, and the dots are shared verbatim.
+spawn-sh-at-startup "command -v steam >/dev/null && exec steam"
+
 // Settings that influence how windows are positioned and sized.
 // Find more information on the wiki:
 // https://niri-wm.github.io/niri/Configuration:-Layout
