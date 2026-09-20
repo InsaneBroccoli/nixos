@@ -10,6 +10,7 @@
     bluetui
     brave-origin
     teams-for-linux
+    vesktop
     grim
     slurp
     udiskie

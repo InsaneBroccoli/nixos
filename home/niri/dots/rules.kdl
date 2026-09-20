@@ -55,7 +55,7 @@ window-rule {
 }
 
 window-rule {
-    match app-id=r#"^brave-discord\.com__channels_@me-Default$"#
+    match app-id=r#"^vesktop$"#
     match app-id=r#"^brave-open\.spotify\.com__-Default$"#
     open-on-workspace "5"
     open-focused false

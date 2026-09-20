@@ -39,11 +39,6 @@ in
     exec = "${browser} --app=https://open.spotify.com/";
   };
 
-  xdg.desktopEntries.discord = {
-    name = "Discord";
-    exec = "${browser} --app=https://discord.com/channels/@me";
-  };
-
   xdg.desktopEntries.protondb = {
     name = "ProtonDB";
     exec = "${browser} --app=https://www.protondb.com/";
