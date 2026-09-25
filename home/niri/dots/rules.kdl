@@ -46,9 +46,8 @@ window-rule {
     variable-refresh-rate true
 }
 
-// The exact title keeps the friends list, toasts and dialogs off workspace 4.
 window-rule {
-    match app-id=r#"^steam$"# title="^Steam$"
+    match app-id=r#"^steam$"#
     open-on-workspace "4"
     open-focused false
     default-column-width { proportion 1.0; }
